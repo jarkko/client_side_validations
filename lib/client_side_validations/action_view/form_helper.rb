@@ -74,11 +74,13 @@ module ClientSideValidations::ActionView::Helpers
           option_hash.merge!(attr[0] => attr[1][:options])
         end
 
-        validation_hash = object_opts[0].client_side_validation_hash(option_hash)
+        if object_opts[0] && object_opts[0].respond_to?(:client_side_validation_hash)
+          validation_hash = object_opts[0].client_side_validation_hash(option_hash)
 
-        option_hash.each_key do |attr|
-          if validation_hash[attr]
-            validator_hash.merge!(object_opts[1][attr][:name] => validation_hash[attr])
+          option_hash.each_key do |attr|
+            if validation_hash[attr]
+              validator_hash.merge!(object_opts[1][attr][:name] => validation_hash[attr])
+            end
           end
         end
 
